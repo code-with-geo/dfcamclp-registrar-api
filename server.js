@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import cors from "cors";
 import mongoose from "mongoose";
+import { DepartmentRouter } from "./src/routes/Departments.js";
 
 app.use(
 	cors({
@@ -14,8 +15,9 @@ app.use(
 );
 
 app.use(express.json());
+app.use("/departments",DepartmentRouter);
 
-mongoose.connect(process.env.CONNECTION_STRING);
+mongoose.connect(process.env.MONGODB_CONNECTION_STRING);
 
 app.listen(process.env.PORT, () => {
 	console.log("Server is running on port: " + process.env.PORT);
