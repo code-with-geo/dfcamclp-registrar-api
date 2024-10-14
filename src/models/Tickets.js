@@ -16,6 +16,7 @@ const TicketSchema = mongoose.Schema({
     ref: "inquirycredential",
   },
   ticketMessage: { type: String, require: true },
+  ticketStatus: { type: String, default: "New" },
   createAt: { type: Date, default: Date.now() },
 });
 
