@@ -2,6 +2,7 @@ import express from "express";
 import {
   addTicket,
   getAllTickets,
+  getAllTicketsByDepartment,
   getTicketsByID,
   removeTicket,
   updateTicketStatus,
@@ -14,5 +15,6 @@ router.post("/remove", removeTicket);
 router.post("/update-status", updateTicketStatus);
 router.get("/", getAllTickets);
 router.post("/get-by-id", getTicketsByID);
+router.post("/department", getAllTicketsByDepartment);
 
 export { router as TicketRouter };

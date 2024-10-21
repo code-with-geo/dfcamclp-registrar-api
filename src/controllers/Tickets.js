@@ -165,3 +165,34 @@ export const removeTicket = async (req, res) => {
     });
   }
 };
+
+export const getAllTicketsByDepartment = async (req, res) => {
+  try {
+    const { departmentID } = req.body;
+    if (!departmentID.match(/^[0-9a-fA-F]{24}$/)) {
+      return res.send({
+        responsecode: "402",
+        message: "Ticket not found.",
+      });
+    }
+    const tickets = await TicketModel.find({ departmentID });
+
+    if (!tickets) {
+      return res.json({
+        responsecode: "402",
+        message: "Ticket not found.",
+      });
+    }
+
+    res.json({
+      responsecode: "200",
+      tickets: tickets,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).send({
+      responsecode: "500",
+      message: "Please contact technical support.",
+    });
+  }
+};

@@ -159,7 +159,7 @@ export const loginUser = async (req, res) => {
       message: "Successfully Login!",
       token,
       userID: user._id,
-      department: user.department,
+      department: user.departmentID,
       isAdmin: user.isAdmin,
     });
   } catch (err) {
