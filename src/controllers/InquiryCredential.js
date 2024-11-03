@@ -4,7 +4,7 @@ dotenv.config();
 
 export const addInquiryCredential = async (req, res) => {
   try {
-    const { name, requirements } = req.body;
+    const { name, requirements, departmentID } = req.body;
 
     let inquiryCredential = await InquiryCredentialModel.findOne({
       inquiryCredentialName: name,
@@ -19,6 +19,7 @@ export const addInquiryCredential = async (req, res) => {
     inquiryCredential = await new InquiryCredentialModel({
       inquiryCredentialName: name,
       inquiryCredentialRequirements: requirements,
+      departmentID,
     }).save();
 
     return res.json({
@@ -146,6 +147,34 @@ export const getInquiryCredentialByID = async (req, res) => {
 
     const inquiryCredential = await InquiryCredentialModel.findOne({
       _id: inquiryCredentialID,
+    });
+
+    res.json({
+      responsecode: "200",
+      inquiryCredential: inquiryCredential,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).send({
+      responsecode: "500",
+      message: "Please contact technical support.",
+    });
+  }
+};
+
+export const getInquiryCredentialByDepartment = async (req, res) => {
+  try {
+    const { departmentID } = req.body;
+
+    if (!departmentID.match(/^[0-9a-fA-F]{24}$/)) {
+      return res.send({
+        responsecode: "402",
+        message: "Inquiry credential not found.",
+      });
+    }
+
+    const inquiryCredential = await InquiryCredentialModel.find({
+      departmentID,
     });
 
     res.json({

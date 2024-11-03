@@ -1,6 +1,18 @@
 import { TicketModel } from "../models/Tickets.js";
+import { MessagesModel } from "../models/Messages.js";
 import dotenv from "dotenv";
 dotenv.config();
+import EmailSender from "../helper/EmailSender.js";
+
+const ticketID = (length) => {
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let result = "";
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return result;
+};
 
 export const addTicket = async (req, res) => {
   try {
@@ -14,16 +26,26 @@ export const addTicket = async (req, res) => {
       message,
     } = req.body;
 
-    await TicketModel({
+    let ticket = await TicketModel({
+      ticketID: ticketID(8),
       ticketFirstName: firstName,
       ticketLastName: lastName,
       ticketContactNumber: contactNo,
       ticketStudentEmail: studentEmail,
       departmentID,
       inquiryCredentialID,
+    }).save();
+
+    await MessagesModel({
+      ticketID: ticket._id,
       ticketMessage: message,
     }).save();
 
+    await EmailSender(
+      ticket.ticketStudentEmail,
+      "Inquiry Notification",
+      `Hi ${ticket.ticketFirstName} ${ticket.ticketLastName}, \n\nYour inquiry ticket is already sent. \nHere's your ticket id ${ticket.ticketID}. If you need further details or have additional questions, please feel free to reach out. We're here to ensure you have all the information you need and look forward to assisting you with any next steps. \n\nThank you & Regards, \nDFCAMCLP Management`
+    );
     return res.json({
       responsecode: "200",
       message: "Inquiry ticket successfully created.",
@@ -176,6 +198,41 @@ export const getAllTicketsByDepartment = async (req, res) => {
       });
     }
     const tickets = await TicketModel.find({ departmentID });
+
+    if (!tickets) {
+      return res.json({
+        responsecode: "402",
+        message: "Ticket not found.",
+      });
+    }
+
+    res.json({
+      responsecode: "200",
+      tickets: tickets,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).send({
+      responsecode: "500",
+      message: "Please contact technical support.",
+    });
+  }
+};
+
+export const getTicketsByTicketID = async (req, res) => {
+  try {
+    const { ticketID } = req.body;
+
+    const tickets = await TicketModel.findOne({ ticketID }).populate([
+      {
+        path: "departmentID",
+        select: "departmentName", // Only include the departmentName field
+      },
+      {
+        path: "inquiryCredentialID",
+        select: "inquiryCredentialName", // Only include the departmentName field
+      },
+    ]);
 
     if (!tickets) {
       return res.json({

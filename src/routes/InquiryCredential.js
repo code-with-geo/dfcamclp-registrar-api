@@ -2,6 +2,7 @@ import express from "express";
 import {
   addInquiryCredential,
   getAllInquiryCredential,
+  getInquiryCredentialByDepartment,
   getInquiryCredentialByID,
   removeInquiryCredential,
   updateInquiryCredential,
@@ -14,4 +15,5 @@ router.post("/update", updateInquiryCredential);
 router.post("/remove", removeInquiryCredential);
 router.get("/", getAllInquiryCredential);
 router.post("/get-by-id", getInquiryCredentialByID);
+router.post("/get-by-department", getInquiryCredentialByDepartment);
 export { router as InquiryCredentialRouter };

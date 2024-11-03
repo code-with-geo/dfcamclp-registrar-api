@@ -4,6 +4,7 @@ import {
   getAllTickets,
   getAllTicketsByDepartment,
   getTicketsByID,
+  getTicketsByTicketID,
   removeTicket,
   updateTicketStatus,
 } from "../controllers/Tickets.js";
@@ -16,5 +17,6 @@ router.post("/update-status", updateTicketStatus);
 router.get("/", getAllTickets);
 router.post("/get-by-id", getTicketsByID);
 router.post("/department", getAllTicketsByDepartment);
+router.post("/get-by-ticketid", getTicketsByTicketID);
 
 export { router as TicketRouter };

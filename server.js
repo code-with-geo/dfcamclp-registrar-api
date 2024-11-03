@@ -10,6 +10,7 @@ import { FAQRouter } from "./src/routes/FAQ.js";
 import { AnnouncementRouter } from "./src/routes/Announcement.js";
 import { InquiryCredentialRouter } from "./src/routes/InquiryCredential.js";
 import { TicketRouter } from "./src/routes/Tickets.js";
+import { MessageRouter } from "./src/routes/Messages.js";
 
 app.use(
   cors({
@@ -26,6 +27,7 @@ app.use("/faqs", FAQRouter);
 app.use("/announcements", AnnouncementRouter);
 app.use("/inquiry-credentials", InquiryCredentialRouter);
 app.use("/inquiry-tickets", TicketRouter);
+app.use("/messages", MessageRouter);
 
 mongoose.connect(process.env.MONGODB_CONNECTION_STRING);
 

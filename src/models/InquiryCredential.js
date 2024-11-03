@@ -1,8 +1,13 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const InquiryCredentialSchema = mongoose.Schema({
   inquiryCredentialName: { type: String, unique: true, require: true },
   inquiryCredentialRequirements: { type: String, require: true },
+  departmentID: {
+    require: true,
+    type: Schema.Types.ObjectId,
+    ref: "departments",
+  },
   createAt: { type: Date, default: Date.now() },
 });
 

@@ -1,6 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 
 const TicketSchema = mongoose.Schema({
+  ticketID: { type: String, require: true, unique: true },
   ticketFirstName: { type: String, require: true },
   ticketLastName: { type: String, require: true },
   ticketContactNumber: { type: String, require: true },
@@ -15,7 +16,6 @@ const TicketSchema = mongoose.Schema({
     type: Schema.Types.ObjectId,
     ref: "inquirycredential",
   },
-  ticketMessage: { type: String, require: true },
   ticketStatus: { type: String, default: "New" },
   createAt: { type: Date, default: Date.now() },
 });
